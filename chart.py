@@ -1,40 +1,40 @@
-# Author: 23f1001452@ds.study.iitm.ac.in
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# --- Generate synthetic business data ---
-np.random.seed(42)
-
-n = 120
-acquisition_cost = np.random.uniform(50, 300, n)
-lifetime_value = acquisition_cost * np.random.uniform(2.5, 4.5, n) + np.random.normal(0, 50, n)
-
-df = pd.DataFrame({
-    "AcquisitionCost": acquisition_cost,
-    "LifetimeValue": lifetime_value
-})
-
-# --- Seaborn styling ---
+# Set professional style
 sns.set_style("whitegrid")
 sns.set_context("talk")
 
-# --- Create the 512x512 figure ---
-plt.figure(figsize=(8, 8))  # 8 inches * 64 dpi = 512px
+# Generate synthetic data
+np.random.seed(42)
+n = 120
+df = pd.DataFrame({
+    "acquisition_cost": np.random.uniform(20, 150, n),
+    "lifetime_value": np.random.uniform(200, 2000, n),
+    "segment": np.random.choice(["New", "Returning", "VIP"], n)
+})
 
-# --- Scatterplot ---
+# Figure size for EXACT 512x512 output:
+# DPI = 64, FIGSIZE = (8, 8)  →  8 inches * 64 dpi = 512 pixels
+plt.figure(figsize=(8, 8), dpi=64)
+
+# Scatterplot
 sns.scatterplot(
     data=df,
-    x="AcquisitionCost",
-    y="LifetimeValue",
-    palette="viridis"
+    x="acquisition_cost",
+    y="lifetime_value",
+    hue="segment",
+    palette="viridis",
+    s=80
 )
 
-plt.title("Customer Lifetime Value vs Acquisition Cost")
+plt.title("Customer Lifetime Value vs Acquisition Cost", fontsize=16)
 plt.xlabel("Acquisition Cost ($)")
 plt.ylabel("Lifetime Value ($)")
-plt.tight_layout()
 
-# --- Save exact 512x512 PNG ---
-plt.savefig("chart.png", dpi=64, bbox_inches="tight")
+# Save with exact dimensions
+plt.savefig("chart.png", dpi=64, bbox_inches="tight", pad_inches=0)
+
+plt.close()
