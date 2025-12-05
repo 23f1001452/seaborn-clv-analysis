@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# Set professional style
+# Professional seaborn style
 sns.set_style("whitegrid")
 sns.set_context("talk")
 
-# Generate synthetic data
+# Synthetic data
 np.random.seed(42)
 n = 120
 df = pd.DataFrame({
@@ -16,25 +16,31 @@ df = pd.DataFrame({
     "segment": np.random.choice(["New", "Returning", "VIP"], n)
 })
 
-# Figure size for EXACT 512x512 output:
-# DPI = 64, FIGSIZE = (8, 8)  →  8 inches * 64 dpi = 512 pixels
-plt.figure(figsize=(8, 8), dpi=64)
+# Create EXACT pixel figure:
+# 512px / 64 DPI = 8 inches → figure must be (8, 8)
+fig = plt.figure(figsize=(8, 8), dpi=64)
 
-# Scatterplot
+# Disable autoscaling that alters size
+fig.set_tight_layout(False)
+
+# Create axes without automatic resizing
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
 sns.scatterplot(
     data=df,
     x="acquisition_cost",
     y="lifetime_value",
     hue="segment",
     palette="viridis",
-    s=80
+    s=80,
+    ax=ax
 )
 
-plt.title("Customer Lifetime Value vs Acquisition Cost", fontsize=16)
-plt.xlabel("Acquisition Cost ($)")
-plt.ylabel("Lifetime Value ($)")
+ax.set_title("Customer Lifetime Value vs Acquisition Cost", fontsize=16)
+ax.set_xlabel("Acquisition Cost ($)")
+ax.set_ylabel("Lifetime Value ($)")
 
-# Save with exact dimensions
-plt.savefig("chart.png", dpi=64, bbox_inches="tight", pad_inches=0)
+# Save EXACT 512×512 — no bbox_inches!
+fig.savefig("chart.png", dpi=64)
 
 plt.close()
